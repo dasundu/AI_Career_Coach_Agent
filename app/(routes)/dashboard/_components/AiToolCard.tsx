@@ -4,8 +4,10 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { db } from '@/configs/db'
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import axios from 'axios'
 const { v4: uuidv4 } = require('uuid');
 
 interface TOOL{
@@ -25,9 +27,15 @@ function AiToolCard  ({tool}: AIToolProps)  {
   const { user } = useUser();
   const router = useRouter();
 
-  const onClickButton = () => {
+  const onClickButton = async () => {
       //create a new record to the history table
-  }
+      const result = await axios.post('/api/history',{
+          recordId : id,
+          content : []
+      });
+      console.log(result);
+      router.push(tool.path+ "/"+ id)
+      }
 
   return (
     <div className='p-3 border rounded-lg'>

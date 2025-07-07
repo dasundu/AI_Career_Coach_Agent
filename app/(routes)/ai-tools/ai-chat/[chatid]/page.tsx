@@ -1,12 +1,14 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoaderCircle, Send } from 'lucide-react'
 import EmptyState from '../_components/EmptyState'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+
+const { v4: uuidv4 } = require('uuid');
 
 type messages={
   content:string,
@@ -19,8 +21,24 @@ function AiChat  ()  {
   const [userInput, setUserInput] = useState<string>('') ;
   const [loading,setLoading] = useState(false);
   const [messageList, setMessageList] = useState<messages[]>([]);
-  const{ chatid } =  useParams();
+  const{ chatid }: any =  useParams();
+  const router = useRouter()
   console.log(chatid);
+
+
+
+  useEffect(() => {
+      chatid && GetMessageList()
+  }, [chatid])
+
+
+  const GetMessageList =async() => {
+    const result = await axios.get('/api/history?recordId='+ chatid);
+    console.log(result.data); 
+    setMessageList(result?.data.content)
+  }
+
+
   const onSend = async() => {
 
     setLoading(true);
@@ -41,9 +59,33 @@ function AiChat  ()  {
 
   console.log(messageList);
 
+
   useEffect(() => {
       // save message into database
+      messageList.length > 0 && updateMessageList();
   },[messageList])
+
+
+
+  const updateMessageList = async () => {
+    const result = await axios.put('/api/history', {
+      content: messageList,
+      recordId: chatid
+    }); 
+    console.log(result);
+  }
+
+   const onNewChat = async () => {
+    const id = uuidv4();
+      //create a new record to the history table
+      const result = await axios.post('/api/history',{
+          recordId : id,
+          content : []
+      });
+      console.log(result);
+      router.replace("/ai-tools/ai-chat/"+ id)
+      }
+
 
   
 
@@ -54,10 +96,10 @@ function AiChat  ()  {
             <h2 className='font-bold text-lg'>AI Career Q/A Chat</h2>
             <p>Smarter career decisions start here — get tailored advice, real-time market insights</p>
           </div>
-          <Button>+  New Chat</Button>
+          <Button onClick={onNewChat}>+  New Chat</Button>
         </div>
 
-        <div className='flex flex-col h-[75vh]'>
+        <div className='flex flex-col h-[70vh] overflow-auto'>
           {messageList?.length <= 0 &&
             <div className='mt-5'>
                 {/*Empty state  can be displayed here*/}
