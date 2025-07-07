@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,26 @@ import {
 } from "@/components/ui/dialog"
 import { File, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { uuid } from 'drizzle-orm/pg-core';
+const { v4: uuidv4 } = require('uuid');
 
 function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
+ 
+  
+  const [file, setFile] = useState<any>();
+  const onFileChange = (event: any) => {
+    const file = event.target.files?.[0];
+    if (file){
+      console.log(file.name);
+      setFile(file);
+    }
+  }
+
+  const onUploadAndAnalyze= () => {
+      const recordId = uuidv4();
+
+  } 
+
   return (
     <Dialog open ={openResumeUpload} onOpenChange={setOpenResumeDialog}>
         {/* DialogTrigger is used to open the dialog */}
@@ -25,11 +43,14 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
                     justify-center p-7 border border-dashed 
                     rounded-xl hover:bg-slate-200 cursor-pointer'>
                         <File className='h-10 w-10' />
-                        <h2 className='mt-3'>Click here to upload pdf file</h2>
+                        {file?
+                        <h2 className='mt-3 text-blue-600'>{file?.name}</h2>:
+                        <h2 className='mt-3'>Click here to upload PDF file</h2>}
 
 
                     </label>
-                    <input type='file' id='resumeUpload' className='hidden'/>
+                    <input type='file' id='resumeUpload' accept='application/pdf' 
+                    className='hidden' onChange={onFileChange}/>
                 </div>
             </DialogDescription>
             </DialogHeader>
