@@ -17,6 +17,7 @@ export async function POST(req :any) {
     let runStatus;
     while(true){
         runStatus = await getRuns(runId);
+        console.log(runStatus?.data)
         if(runStatus?.data[0]?.status=== 'Completed') 
             break;
 

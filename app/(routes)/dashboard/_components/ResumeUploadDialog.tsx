@@ -8,15 +8,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { File, Sparkles } from 'lucide-react'
+import { File, Loader2Icon, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { uuid } from 'drizzle-orm/pg-core';
+import axios from 'axios';
 const { v4: uuidv4 } = require('uuid');
 
 function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
  
   
   const [file, setFile] = useState<any>();
+  const [loading , setLoading] = useState(false);
   const onFileChange = (event: any) => {
     const file = event.target.files?.[0];
     if (file){
@@ -25,8 +27,16 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
     }
   }
 
-  const onUploadAndAnalyze= () => {
+  const onUploadAndAnalyze= async () => {
+      setLoading(true);
       const recordId = uuidv4();
+      const formData = new FormData();
+      formData.append('recordId', recordId);
+      formData.append('resumeFile', file);
+      //Send FormData to Backend Server
+      const result = await axios.post ('/api/ai-resume-agent', formData)
+      console.log(result.data);
+      setLoading(false);
 
   } 
 
@@ -56,7 +66,8 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
             </DialogHeader>
             <DialogFooter>
                 <Button variant={'outline'}>Cancel</Button>
-                <Button><Sparkles /> Upload & Analyze</Button>
+                <Button disabled={!file || loading} onClick={onUploadAndAnalyze}>
+                  {loading? <Loader2Icon className='animate-spin'/>:<Sparkles />} Upload & Analyze</Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
