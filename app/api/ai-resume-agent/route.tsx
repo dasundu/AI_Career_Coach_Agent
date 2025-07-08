@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { inngest } from "@/inngest/client";
 import axios from "axios";
+import { currentUser } from "@clerk/nextjs/server";
 
 
 export async function POST(req:NextRequest) {
@@ -9,10 +10,10 @@ export async function POST(req:NextRequest) {
     const FormData = await req.formData();
     const resumeFile:any = FormData.get('resumeFile') ;
     const recordId = FormData.get('recordId');
-    
+    const user = await currentUser();
 
-    const lorder = new WebPDFLoader(resumeFile);
-    const docs = await lorder.load();
+    const loader = new WebPDFLoader(resumeFile);
+    const docs = await loader.load();
     console.log(docs[0]) //Raw pdf file
 
     const arrayBuffer = await resumeFile.arrayBuffer();
@@ -23,7 +24,10 @@ export async function POST(req:NextRequest) {
         data: { 
            recordId: recordId,
            base64ResumeFile : base64,
-           pdfText: docs[0]?.pageContent
+           pdfText: docs[0]?.pageContent,
+           aiAgentType: '/ai-tools/ai-resume-analyzer',
+           userEmail: user?.primaryEmailAddress?.emailAddress
+
         }
     });
     const runId = resultIds?.ids[0];
@@ -38,7 +42,7 @@ export async function POST(req:NextRequest) {
         await new Promise(resolve => setTimeout(resolve, 500))
     }
 
-    return NextResponse.json(runStatus.data?.[0].output?.output[0])
+    return NextResponse.json(runStatus.data)
 
 }
 

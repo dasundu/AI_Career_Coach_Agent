@@ -1,6 +1,8 @@
+import { HistoryTable } from "@/configs/schema";
 import { inngest } from "./client";
 import { createAgent, anthropic, openai, gemini } from '@inngest/agent-kit';
 import ImageKit from "imagekit";
+import { db } from "@/configs/db";
 
 export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
@@ -214,10 +216,10 @@ export const AiResumeAgent =   inngest.createFunction(
     { id: 'AiResumeAgent' },
     { event: 'AiResumeAgent'},
     async ({ event, step }) => {
-        const {recordId, base64ResumeFile ,pdfText} = await event.data;
+        const {recordId, base64ResumeFile ,pdfText , aiAgentType , userEmail} = await event.data;
         //upload file to cloud
 
-        const uploadImageUrl = await step.run("uploadImage", async() => {
+        const uploadFileUrl = await step.run("uploadImage", async() => {
             const imagekitFile = await imagekit.upload({
                 file: base64ResumeFile, 
                 fileName: `${Date.now()}.pdf`,
@@ -229,11 +231,30 @@ export const AiResumeAgent =   inngest.createFunction(
         })
         
         const aiResumeReport = await AiResumeAnalyzerAgent.run(pdfText);
-        
         //@ts-ignore
         const rawContent = aiResumeReport.output[0].content;
         const rawContentJson = rawContent.replace('```json', '').replace('```', '');
         const parseJson = JSON.parse(rawContentJson);
-        return aiResumeReport;
+        //return parseJson;
+
+        //Save to database
+        const saveToDb = await step.run("saveToDb", async () => {
+            const result = await db.insert(HistoryTable).values({
+            
+                recordId: recordId,
+                content: parseJson,
+                aiAgentType:aiAgentType,
+                createdAt:(new Date()).toString(),
+                userEmail : userEmail,
+                metaData:uploadFileUrl
+
+            });
+            console.log(result);
+            return parseJson
+
+        })  
+
+        
+
     }
-)
+);

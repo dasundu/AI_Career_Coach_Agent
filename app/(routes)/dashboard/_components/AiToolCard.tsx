@@ -41,7 +41,8 @@ function AiToolCard  ({tool}: AIToolProps)  {
       //create a new record to the history table
       const result = await axios.post('/api/history',{
           recordId : id,
-          content : []
+          content : [],
+          aiAgentType : tool.path
       });
       console.log(result);
       router.push(tool.path+ "/"+ id)

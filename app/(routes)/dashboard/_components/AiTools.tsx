@@ -15,7 +15,7 @@ const aiToolsList = [
         desc: 'Improve your resume',
         icon: '/resume.png',
         button: 'Analyze Now',
-        path: '/ai-resume-analyzer'
+        path: '/ai-tools/ai-resume-analyzer'
     },
     {
         name: 'Career Roadmap Generator',

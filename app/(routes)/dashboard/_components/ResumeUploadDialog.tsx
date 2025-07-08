@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import { File, Loader2Icon, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { uuid } from 'drizzle-orm/pg-core';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 const { v4: uuidv4 } = require('uuid');
 
 function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
@@ -19,6 +20,12 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
   
   const [file, setFile] = useState<any>();
   const [loading , setLoading] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    setFile([])
+  }, [open])
+
+  
   const onFileChange = (event: any) => {
     const file = event.target.files?.[0];
     if (file){
@@ -33,10 +40,14 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
       const formData = new FormData();
       formData.append('recordId', recordId);
       formData.append('resumeFile', file);
+      //formData.append('aiAgentType', '/ai-tools/ai-resume-analyzer');
+
       //Send FormData to Backend Server
       const result = await axios.post ('/api/ai-resume-agent', formData)
       console.log(result.data);
       setLoading(false);
+      router.push('/ai-tools/ai-resume-analyzer/' + recordId)
+      setOpenResumeDialog(false);
 
   } 
 
