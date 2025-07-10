@@ -16,14 +16,15 @@ import { useRouter } from 'next/navigation';
 const { v4: uuidv4 } = require('uuid');
 
 function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
- 
+
   
-  const [file, setFile] = useState<any>();
+  const [file, setFile] = useState<any>(null); // Changed from [] to null
   const [loading , setLoading] = useState(false);
   const router = useRouter();
+  
   useEffect(() => {
-    setFile([])
-  }, [open])
+    setFile(null) // Changed from [] to null
+  }, [openResumeUpload]) // Fixed: changed 'open' to 'openResumeUpload'
 
   
   const onFileChange = (event: any) => {
@@ -49,7 +50,7 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
       router.push('/ai-tools/ai-resume-analyzer/' + recordId)
       setOpenResumeDialog(false);
 
-  } 
+  }
 
   return (
     <Dialog open ={openResumeUpload} onOpenChange={setOpenResumeDialog}>
@@ -60,8 +61,8 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
             <DialogTitle>Upload resume pdf file</DialogTitle>
             <DialogDescription>
                 <div>
-                    <label htmlFor = 'resumeUpload' className='flex items-center flex-col 
-                    justify-center p-7 border border-dashed 
+                    <label htmlFor = 'resumeUpload' className='flex items-center flex-col
+                    justify-center p-7 border border-dashed
                     rounded-xl hover:bg-slate-200 cursor-pointer'>
                         <File className='h-10 w-10' />
                         {file?
@@ -70,7 +71,7 @@ function ResumeUploadDialog({openResumeUpload , setOpenResumeDialog} : any) {
 
 
                     </label>
-                    <input type='file' id='resumeUpload' accept='application/pdf' 
+                    <input type='file' id='resumeUpload' accept='application/pdf'
                     className='hidden' onChange={onFileChange}/>
                 </div>
             </DialogDescription>

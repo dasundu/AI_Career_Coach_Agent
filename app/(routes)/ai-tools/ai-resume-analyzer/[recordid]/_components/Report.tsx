@@ -1,127 +1,142 @@
-import React from 'react'
+// Report.jsx
 
-function Report( {aiReport}:any) {
+import ResumeUploadDialog from '@/app/(routes)/dashboard/_components/ResumeUploadDialog';
+import React, { useState } from 'react';
+
+// Placeholder Sparkles component
+const Sparkles = () => (
+  <span style={{ marginLeft: '4px', display: 'inline-block', color: 'white', fontWeight: 'bold' }}>✦</span>
+);
+
+function Report({ aiReport }: any) {
+
+    const [openResumeUpload, setOpenResumeDialog] = useState(false);
+
+  // Add a loading state to prevent errors if aiReport is not yet available
+  if (!aiReport) {
+    return (
+      <div className="p-4 sm:p-6 text-center text-gray-600 h-full flex items-center justify-center">
+        Loading AI Report...
+      </div>
+    );
+  }
+
   return (
+    // Adjusted padding for smaller screens (p-4 on mobile, p-6 on small screens and up)
+    <div className="p-4 sm:p-6">
+      <div className="flex justify-between items-center mb-4">
+        {/* Adjusted font size for mobile (text-2xl on mobile, text-3xl on small screens and up) */}
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800">AI Analysis Results</h2>
+        <button
+          type="button" onClick={() => setOpenResumeDialog(true)}
+          className="bg-black text-white hover:bg-gray-800 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm px-4 py-2.5 shadow-sm flex items-center justify-center"
+        >
+          Re-analyze <Sparkles />
+        </button>
+      </div>
 
-    <div>
-        <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-extrabold text-gray-800 gradient-component-text">AI Analysis Results</h2>
-            <button type="button" className="text-gray-500 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 gradient-button-bg text-white shadow-lg">
-                Re-analyze <i className="fa-solid fa-sync ml-2"></i>
-            </button>
+      {/* Overall Score */}
+      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg shadow-md p-6 mb-6 text-white">
+        <h3 className="text-xl font-bold mb-4 flex items-center">
+          <i className="fas fa-star text-yellow-300 mr-2"></i> Overall Score
+        </h3>
+        <div className="flex items-center justify-between mb-4">
+          {/* Adjusted font size for mobile (text-5xl on mobile, text-6xl on small screens and up) */}
+          <span className="text-5xl sm:text-6xl font-extrabold">{aiReport?.overall_score}<span className="text-2xl">/100</span></span>
+          {/* Using dynamic overall_feedback directly */}
+          <div className="text-lg sm:text-xl font-extrabold">{aiReport?.overall_feedback}</div>
         </div>
-
-       
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 border border-blue-200 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out">
-            <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center">
-                <i className="fas fa-star text-yellow-500 mr-2"></i> Overall Score
-            </h3>
-            <div className="flex items-center justify-between mb-4">
-                <span className="text-6xl font-extrabold text-blue-600">85<span className="text-2xl">/100</span></span>
-                <div className="flex items-center">
-                    <i className="fas fa-arrow-up text-green-500 text-lg mr-2"></i>
-                    <span className="text-green-500 text-lg font-bold">Excellent!</span>
-                </div>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '85%' }}></div>
-            </div>
-            <p className="text-gray-600 text-sm">Your resume is strong, but there are areas to refine. </p>
+        <div className="w-full bg-white bg-opacity-30 rounded-full h-2.5 mb-4">
+          {/* Progress bar width based on overall_score directly */}
+          <div className="bg-white h-2.5 rounded-full" style={{ width: `${aiReport?.overall_score}%` }}></div>
         </div>
+        {/* Using dynamic summary_comment directly */}
+        <p className="text-white text-sm">{aiReport?.summary_comment}</p>
+      </div>
 
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow-md p-5 border border-green-200 relative overflow-hidden group">
-                <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-user-circle text-gray-500 mr-2"></i> Contact Info</h4>
-                <span className="text-4xl font-bold highlight-text">95%</span>
-                <p className="text-sm text-gray-600 mt-2">Perfectly structured and complete.</p>
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-5 border border-green-200 relative overflow-hidden group">
-                <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-briefcase text-gray-500 mr-2"></i> Experience</h4>
-                <span className="text-4xl font-bold highlight-text">88%</span>
-                <p className="text-sm text-gray-600 mt-2">Strong bullet points and impact.</p>
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-5 border border-yellow-200 relative overflow-hidden group">
-                <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-graduation-cap text-gray-500 mr-2"></i> Education</h4>
-                <span className="text-4xl font-bold warning-text">70%</span>
-                <p className="text-sm text-gray-600 mt-2">Consider adding relevant coursework.</p>
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-5 border border-red-200 relative overflow-hidden group">
-                <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-lightbulb text-gray-500 mr-2"></i> Skills</h4>
-                <span className="text-4xl font-bold danger-text">60%</span>
-                <p className="text-sm text-gray-600 mt-2">Expand on specific skill proficiencies.</p>
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
+      {/* Individual Scores Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="bg-white rounded-lg shadow-sm p-5 border border-gray-200">
+          <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-address-book text-gray-500 mr-2"></i> Contact Info</h4>
+          {/* Using dynamic score and comment for Contact Info directly */}
+          <span className="text-3xl sm:text-4xl font-bold text-green-600">{aiReport?.sections?.contact_info?.score}%</span>
+          <p className="text-sm text-gray-600 mt-2">{aiReport?.sections?.contact_info?.comment}</p>
         </div>
-
-        
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center">
-                <i className="fas fa-lightbulb text-orange-400 mr-2"></i> Tips for Improvement
-            </h3>
-            <ol className="list-none space-y-4">
-                <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-3"><i className="fas fa-check"></i></span>
-                    <div>
-                        <p className="font-semibold text-gray-800">Quantify Achievements:</p>
-                        <p className="text-gray-600 text-sm">Add more numbers and metrics to your experience section to show impact.</p>
-                    </div>
-                </li>
-                <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-3"><i className="fas fa-check"></i></span>
-                    <div>
-                        <p className="font-semibold text-gray-800">Keywords Optimization:</p>
-                        <p className="text-gray-600 text-sm">Integrate more industry-specific keywords relevant to your target roles.</p>
-                    </div>
-                </li>
-                <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-3"><i className="fas fa-check"></i></span>
-                    <div>
-                        <p className="font-semibold text-gray-800">Action Verbs:</p>
-                        <p className="text-gray-600 text-sm">Start bullet points with strong action verbs to make your achievements stand out.</p>
-                    </div>
-                </li>
-            </ol>
+        <div className="bg-white rounded-lg shadow-sm p-5 border border-gray-200">
+          <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-briefcase text-gray-500 mr-2"></i> Experience</h4>
+          {/* Using dynamic score and comment for Experience directly */}
+          <span className="text-3xl sm:text-4xl font-bold text-green-600">{aiReport?.sections?.experience?.score}%</span>
+          <p className="text-sm text-gray-600 mt-2">{aiReport?.sections?.experience?.comment}</p>
         </div>
-
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow-md p-5 border border-green-200">
-                <h3 className="text-lg font-bold text-gray-700 mb-3 flex items-center">
-                    <i className="fas fa-hand-thumbs-up text-green-500 mr-2"></i> What's Good
-                </h3>
-                <ul className="list-disc list-inside text-gray-600 text-sm space-y-2">
-                    <li>Clean and professional formatting.</li>
-                    <li>Clear and concise contact information.</li>
-                    <li>Relevant work experience.</li>
-                </ul>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-5 border border-red-200">
-                <h3 className="text-lg font-bold text-gray-700 mb-3 flex items-center">
-                    <i className="fas fa-hand-thumbs-down text-red-500 mr-2"></i> Needs Improvement
-                </h3>
-                <ul className="list-disc list-inside text-gray-600 text-sm space-y-2">
-                    <li>Skills section lacks detail.</li>
-                    <li>Some experience bullet points could be stronger.</li>
-                    <li>Missing a professional summary/objective.</li>
-                </ul>
-            </div>
+        <div className="bg-white rounded-lg shadow-sm p-5 border border-gray-200">
+          <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-graduation-cap text-gray-500 mr-2"></i> Education</h4>
+          {/* Using dynamic score and comment for Education directly */}
+          <span className="text-3xl sm:text-4xl font-bold text-orange-500">{aiReport?.sections?.education?.score}%</span>
+          <p className="text-sm text-gray-600 mt-2">{aiReport?.sections?.education?.comment}</p>
         </div>
-
-        
-        <div className="bg-blue-600 text-white rounded-lg shadow-md p-6 mb-6 text-center gradient-button-bg">
-            <h3 className="text-2xl font-bold mb-3">Ready to refine your resume? 💪</h3>
-            <p className="text-base mb-4">Make your application stand out with our premium insights and features.</p>
-            <button type="button" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-blue-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
-                Upgrade to Premium <i className="fas fa-arrow-right ml-2 text-blue-600"></i>
-            </button>
+        <div className="bg-white rounded-lg shadow-sm p-5 border border-gray-200">
+          <h4 className="text-lg font-semibold text-gray-700 mb-3"><i className="fas fa-lightbulb text-gray-500 mr-2"></i> Skills</h4>
+          {/* Using dynamic score and comment for Skills directly */}
+          <span className="text-3xl sm:text-4xl font-bold text-red-500">{aiReport?.sections?.skills?.score}%</span>
+          <p className="text-sm text-gray-600 mt-2">{aiReport?.sections?.skills?.comment}</p>
         </div>
+      </div>
 
+      {/* Tips for Improvement */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-200">
+        <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center">
+          <i className="fas fa-lightbulb text-orange-400 mr-2"></i> Tips for Improvement
+        </h3>
+        <ol className="list-none space-y-4">
+          {/* Dynamically rendering tips_for_improvement directly */}
+          {aiReport?.tips_for_improvement?.map((tip: string, index: number) => (
+            <li key={index} className="flex items-start">
+<span className="flex-shrink-0 w-2 h-2 rounded-full bg-black mt-2 mr-4"></span>              <div>
+                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: tip }}></p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* What's Good / Needs Improvement */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="bg-white rounded-lg shadow-md p-5 border border-gray-200">
+          <h3 className="text-lg font-bold text-gray-700 mb-3 flex items-center">
+            <i className="fas fa-check-circle text-green-500 mr-2"></i> What's Good
+          </h3>
+          <ul className="list-disc list-inside text-gray-600 text-sm space-y-2">
+            {/* Dynamically rendering whats_good directly */}
+            {aiReport?.whats_good?.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-5 border border-gray-200">
+          <h3 className="text-lg font-bold text-gray-700 mb-3 flex items-center">
+            <i className="fas fa-times-circle text-red-500 mr-2"></i> Needs Improvement
+          </h3>
+          <ul className="list-disc list-inside text-gray-600 text-sm space-y-2">
+            {/* Dynamically rendering needs_improvement directly */}
+            {aiReport?.needs_improvement?.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Upgrade to Premium */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-lg shadow-md p-6 mb-6 text-center">
+        <h3 className="text-xl sm:text-2xl font-bold mb-3">Ready to refine your resume? 💡</h3>
+        <p className="text-sm sm:text-base mb-4">Make your application stand out with our premium insights and features.</p>
+        <button type="button" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-blue-600 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+          Upgrade to Premium
+        </button>
+      </div>
+
+      <ResumeUploadDialog openResumeUpload={openResumeUpload} setOpenResumeDialog={()=>setOpenResumeDialog(false)} />
     </div>
-  )
+  );
 }
 
-export default Report
+export default Report;

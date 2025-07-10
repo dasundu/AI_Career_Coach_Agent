@@ -49,7 +49,7 @@ overall_score (0–100)
 
 
 
-overall_feedback (short message e.g., "Excellent", "Needs improvement")
+overall_feedback (short message e.g., "Excellent", "Needs improvement"  give in two or one words)
 
 
 
@@ -93,11 +93,11 @@ Tips for improvement (3–5 tips)
 
 
 
-What’s Good (1–3 strengths)
+What’s Good (1 to 3 maximum strengths)
 
 
 
-Needs Improvement (1–3 weaknesses)
+Needs Improvement (1 to 3 maximum weaknesses)
 
 
 
