@@ -1,24 +1,28 @@
 import { inngest } from "@/inngest/client";
+import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req :any) {
-    
-    const { userInput } = await req.json();
-
+export async function POST(req : NextRequest){
+    const { roadmapId, userInput } = await req.json();
+    const user = await currentUser();
     const resultIds = await inngest.send({
-        name: 'AiCareerAgent',
+        name: 'AiRoadMapAgent',
         data: { 
-            userInput: userInput
+            userInput: userInput,
+            roadmapId: roadmapId,
+            userEmail: user?.primaryEmailAddress?.emailAddress
         }
     });
     const runId = resultIds?.ids[0];
+    console.log( runId);
 
     let runStatus;
+    //Use polling to check Run Status
     while(true){
         runStatus = await getRuns(runId);
         console.log(runStatus?.data)
-         if(runStatus?.data[0]?.status=== 'Completed') {
+        if(runStatus?.data[0]?.status=== 'Completed') {
             break;
         }
         if(runStatus?.data[0]?.status=== 'Canceled'){

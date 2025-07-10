@@ -191,6 +191,54 @@ Edit
 
 })  
 
+export const AIRoadmapGeneratorAgent = createAgent({
+    name: 'AIRoadmapGeneratorAgent',
+    description: 'Generate Details Tree Like flow Roadmap',
+    system: `Generate a React flow tree-structured learning roadmap for user input position/skills in the following format:
+
+- Vertical tree structure with meaningful x/y positions to form a flow
+- Structure should be similar to roadmap.sh layout
+- Steps should be ordered from fundamentals to advanced
+- Include branching for different specializations (if applicable)
+- Each node must have a title, short description, and learning resource link
+- Use unique IDs for all nodes and edges
+- Make it more spacious node positioning
+
+Response in JSON format:
+
+{
+  roadmapTitle: '',
+  description: '<3-5 Lines>',
+  duration: '',
+  initialNodes: [
+    {
+      id: '1',
+      type: 'turbo',
+      position: { x: 0, y: 0 },
+      data: {
+        title: 'Step Title',
+        description: 'Short two-line explanation of what the step covers.',
+        link: 'Helpful link for learning this step',
+      },
+    },
+    // ...
+  ],
+  initialEdges: [
+    {
+      id: 'e1-2',
+      source: '1',
+      target: '2',
+    },
+    // ...
+  ]
+}`,
+    model: gemini({
+        model:"gemini-2.5-flash",
+        apiKey:process.env.GEMINI_API_KEY
+    })
+
+})    
+
 export const AiCareerAgent = inngest.createFunction(
     { id: 'AiCareerAgent' },
     { event: 'AiCareerAgent'},
@@ -258,3 +306,17 @@ export const AiResumeAgent =   inngest.createFunction(
 
     }
 );
+
+
+export const AIRoadmapAgent = inngest.createFunction(
+    { id: 'AIRoadMapAgent' },
+    { event: 'AIRoadmapAgent' },
+    async({event,step}) => {
+      const { roadmapId , userInput, userEmail } = await event.data;
+
+      
+      const roadmapResult = await AIRoadmapGeneratorAgent.run("UserInput"+userInput);
+
+      //Save to database
+    }
+  )
