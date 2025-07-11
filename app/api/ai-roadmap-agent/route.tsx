@@ -6,22 +6,25 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req : NextRequest){
     const { roadmapId, userInput } = await req.json();
     const user = await currentUser();
+    
+    // Fixed: Changed event name from 'AiRoadMapAgent' to 'AIRoadMapAgent'
     const resultIds = await inngest.send({
-        name: 'AiRoadMapAgent',
+        name: 'AIRoadMapAgent', // This should match the event name in your function
         data: { 
             userInput: userInput,
             roadmapId: roadmapId,
             userEmail: user?.primaryEmailAddress?.emailAddress
         }
     });
+    
     const runId = resultIds?.ids[0];
-    console.log( runId);
+    console.log("Run ID:", runId);
 
     let runStatus;
     //Use polling to check Run Status
     while(true){
         runStatus = await getRuns(runId);
-        console.log(runStatus?.data)
+        console.log("Run Status:", runStatus?.data)
         if(runStatus?.data[0]?.status=== 'Completed') {
             break;
         }
@@ -33,7 +36,6 @@ export async function POST(req : NextRequest){
     }
 
     return NextResponse.json(runStatus.data?.[0].output?.output[0])
-
 }
 
 export async function getRuns(runId:string) {
@@ -44,5 +46,4 @@ export async function getRuns(runId:string) {
     })
 
     return result.data
-    
 }
