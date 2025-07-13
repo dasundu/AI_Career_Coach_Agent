@@ -17,7 +17,7 @@ function RoadmapCanvas({initialNodes, initialEdges}: any) {
             nodeTypes={nodeTypes}>
             
             <Controls />
-            <MiniMap/>
+            
             {/* @ts-ignore */}
             <Background varient="dots" gap={12} size={1} />
         </ReactFlow> 

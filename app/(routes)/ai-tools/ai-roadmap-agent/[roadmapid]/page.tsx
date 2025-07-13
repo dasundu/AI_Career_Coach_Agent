@@ -4,7 +4,7 @@ import { Description } from '@radix-ui/react-dialog';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import RoadmapCanvas from './_components/RoadmapCanvas';
+import RoadmapCanvas from '@/app/(routes)/ai-tools/ai-roadmap-agent/_components/RoadmapCanvas';
 import RoadmapGeneratorDialog from '@/app/(routes)/dashboard/_components/RoadmapGeneratorDialog';
 
 function RoadmapGeneratorAgent() {
