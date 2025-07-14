@@ -29,8 +29,9 @@ function RoadmapGeneratorDialog( { openDialog, setOpenDialog } : any ) {
                 userInput: userInput
             }) 
             console.log(result.data);
-            router.push('/ai-tools/ai-roadmap-agent/'+ roadmapId)
             setLoading(false);
+            setOpenDialog(false);
+            router.push('/ai-tools/ai-roadmap-agent/'+ roadmapId)
         } catch (e){
             setLoading(false);
             console.log(e)
@@ -51,7 +52,7 @@ function RoadmapGeneratorDialog( { openDialog, setOpenDialog } : any ) {
             </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-                <Button variant={'outline'}>Cancel</Button>
+                <Button variant={'outline'} onClick={() => setOpenDialog(false)}>Cancel</Button>
                 <Button onClick = {GenerateRoadmap}
                     disabled={loading || !userInput }
                 >{loading?<Loader2Icon className='animate-spin'/>:<SparkleIcon/>}Generate</Button>

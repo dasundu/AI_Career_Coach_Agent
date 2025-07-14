@@ -71,7 +71,7 @@ function AiToolCard  ({tool}: AIToolProps)  {
 
         <RoadmapGeneratorDialog
         openDialog = {openRoadmapDialog}
-        setOpenDialog = {() => setOpenRoadmapDialog(false)}
+        setOpenDialog = {setOpenRoadmapDialog}
         />
         
     </div>

@@ -2,7 +2,7 @@
 import React from 'react'
 import AiToolCard from './AiToolCard'
 
-const aiToolsList = [
+export const aiToolsList = [
     {
         name: 'AI Career Q&A Chat',
         desc: 'chat with AI Agent',

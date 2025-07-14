@@ -28,14 +28,11 @@ export async function POST(req : NextRequest){
         if(runStatus?.data[0]?.status=== 'Completed') {
             break;
         }
-        if(runStatus?.data[0]?.status=== 'Canceled'){
-            break;
-        }
 
         await new Promise(resolve => setTimeout(resolve, 500))
     }
 
-    return NextResponse.json(runStatus.data?.[0].output?.output[0])
+    return NextResponse.json(runStatus.data)
 }
 
 export async function getRuns(runId:string) {

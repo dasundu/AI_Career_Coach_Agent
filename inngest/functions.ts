@@ -338,5 +338,7 @@ export const AIRoadmapAgent = inngest.createFunction(
             return parseJson
 
         })  
+
+        return saveToDb;
     }
   )
