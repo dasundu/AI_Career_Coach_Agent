@@ -1,6 +1,6 @@
 import React from 'react'
 import WelcomeBanner from './_components/WelcomeBanner'
-import AiTools from './_components/AiTools'
+import AiTools from './_components/AiToolsList'
 import History from './_components/History'
 
 function Dashboard() {

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { index } from 'drizzle-orm/mysql-core'
-import { aiToolsList } from './AiTools'
+import { aiToolsList } from './AiToolsList'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
 
