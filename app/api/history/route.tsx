@@ -42,26 +42,30 @@ export async function PUT(req : any) {
 export async function GET(req: any) {
     const {searchParams} = new URL(req.url);
     const recordId = searchParams.get('recordId');
-    const user= await currentUser();
+    const user = await currentUser();
 
     try {
         if(recordId){
-        const result = await db.select().from(HistoryTable)
-            .where(eq(HistoryTable.recordId, recordId));
+            const result = await db.select().from(HistoryTable)
+                .where(eq(HistoryTable.recordId, recordId));
             return NextResponse.json(result[0])
         }  
         
         else{
-             const result = await db.select().from(HistoryTable)
-            .where(eq(HistoryTable.userEmail, user?.primaryEmailAddress?.emailAddress))
-            .orderBy(desc(HistoryTable.id))
-            ;
-            return NextResponse.json(result)
+            // Check if user email exists before querying
+            const userEmail = user?.primaryEmailAddress?.emailAddress;
+            if (!userEmail) {
+                return NextResponse.json({ error: "User email not found" }, { status: 401 });
+            }
+
+            const result = await db.select().from(HistoryTable)
+                .where(eq(HistoryTable.userEmail, userEmail))
+                .orderBy(desc(HistoryTable.id));
+            
+            return NextResponse.json(result);
         }
-        return NextResponse.json({ })
 
-
-    }catch( e ) {
-        return NextResponse.json(e)
+    } catch( e ) {
+        return NextResponse.json({ error: "Database query failed" }, { status: 500 });
     }
 }
