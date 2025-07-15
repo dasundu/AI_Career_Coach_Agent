@@ -9,7 +9,6 @@ import { aiToolsList } from './AiToolsList'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
 
-
 const History = () => {
 
     const [userHistory, setUserHistory] = useState([]);
@@ -48,7 +47,6 @@ const History = () => {
         </div>
         }
 
-
         {userHistory.length == 0 && !loading ?
             <div className='flex place-items-center justify-center mt-5 flex-col mt-6 '>
                 <Image src={'/idea.png'}  
@@ -62,13 +60,13 @@ const History = () => {
         :
         <div>
             {userHistory?.map((history:any, index:number) => (
-                <Link href={history?.aiAgentType + "/" + history?.recordId} className='flex justify-between items-center my-3 border p-3 rounded-lg'>
-                    <div key={index} className='flex gap-5' >
-                        <Image src ={GetAgentName(history?.aiAgentType)?.icon} alt={'image'}
+                <Link key={index} href={history?.aiAgentType + "/" + history?.recordId} className='flex justify-between items-center my-3 border p-3 rounded-lg'>
+                    <div className='flex gap-5' >
+                        <Image src={GetAgentName(history?.aiAgentType)?.icon || '/default-icon.png'} alt={'image'}
                             width={20}
                             height={20}
                         />
-                        <h2>{GetAgentName(history?.aiAgentType)?.name}</h2>
+                        <h2>{GetAgentName(history?.aiAgentType)?.name || 'Unknown Tool'}</h2>
                     </div>
                     <h2>{history.createdAt}</h2>
                 </Link>
