@@ -2,7 +2,7 @@ import { inngest } from "@/inngest/client";
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-export async function POST(req :any) {
+export async function POST(req: any) {
     
     const { userInput } = await req.json();
 
@@ -32,9 +32,10 @@ export async function POST(req :any) {
 
 }
 
- async function getRuns(runId:string) {
-    const result=await axios.get(process.env.INNGEST_SERVER_HOST+'/v1/events/' + runId + '/runs',{
-        headers:{
+// REMOVE 'export' from here - change this line:
+async function getRuns(runId: string) {
+    const result = await axios.get(process.env.INNGEST_SERVER_HOST + '/v1/events/' + runId + '/runs', {
+        headers: {
             Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`
         }
     })
