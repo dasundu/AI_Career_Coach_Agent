@@ -1,4 +1,4 @@
-# 🚀 AI Career Agent
+# 🚀 AI Career Coach Agent
 
 A full-stack AI-powered career coaching application built with Next.js that helps professionals navigate their career journey with intelligent guidance and personalized recommendations.
 
