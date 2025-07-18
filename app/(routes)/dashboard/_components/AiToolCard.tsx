@@ -44,7 +44,10 @@ function AiToolCard  ({tool}: AIToolProps)  {
       return;
     }
 
-
+    // Disable Cover Letter Generator
+    if(tool.name == "Cover Letter Generator") {
+        return;
+    }
 
       //create a new record to the history table
       const result = await axios.post('/api/history',{
@@ -62,9 +65,13 @@ function AiToolCard  ({tool}: AIToolProps)  {
         <h2 className='font-bold mt-2'>{tool.name}</h2>
         <p className='text-gray-400'>{tool.desc}</p>
         
-        <Button className='w-full mt-3'
+        <Button 
+        className='w-full mt-3'
         onClick={onClickButton}
-        >{tool.button}</Button>
+        disabled={tool.name === "Cover Letter Generator"}
+        >
+        {tool.name === "Cover Letter Generator" ? "Coming Soon" : tool.button}
+        </Button>
 
         <ResumeUploadDialog openResumeUpload = {openResumeUpload} 
         setOpenResumeDialog = { setOpenResumeUpload}/>
