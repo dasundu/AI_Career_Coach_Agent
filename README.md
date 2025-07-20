@@ -1,6 +1,6 @@
 # 🚀 AI Career Coach Agent
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://vortexiogaming.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)]([https://vortexiogaming.vercel.app](https://ai-career-agent-seven.vercel.app/))
 
 A full-stack AI-powered career coaching application built with Next.js that helps professionals navigate their career journey with intelligent guidance and personalized recommendations.
 
