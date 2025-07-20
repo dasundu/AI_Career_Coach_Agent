@@ -1,7 +1,9 @@
 # 🚀 AI Career Coach Agent
 
-
 A full-stack AI-powered career coaching application built with Next.js that helps professionals navigate their career journey with intelligent guidance and personalized recommendations.
+
+## 🌟 Live Demo
+**[🎯 Try the live demo here →](https://ai-career-agent-seven.vercel.app/)**
 
 ## ✨ Features
 
@@ -176,6 +178,8 @@ The application leverages **Gemini API** for:
 1. **Connect your repository** to Vercel
 2. **Configure environment variables** in Vercel dashboard
 3. **Deploy** with automatic builds on git push
+
+**Live Demo:** https://ai-career-agent-seven.vercel.app/
 
 ```bash
 npm run build
